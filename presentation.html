@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JUA HOTEL | Q4Life Presentation Mode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f1e7;
+      --ink: #2f2418;
+      --muted: #6f6458;
+      --panel: #fffdf8;
+      --line: #e7d9c4;
+      --brand: #8a4a2e;
+      --sun: #d79f35;
+      --sea: #1e7285;
+      --good: #2f9e44;
+      --shadow: 0 24px 46px rgba(49, 32, 20, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Sora", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(215, 159, 53, 0.22), transparent 32%),
+        radial-gradient(circle at 90% 10%, rgba(30, 114, 133, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 88%, rgba(138, 74, 46, 0.16), transparent 34%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 26px;
+    }
+
+    .deck {
+      width: min(1250px, 100%);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(255, 248, 235, 0.92));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: intro 700ms ease forwards;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .top {
+      padding: 34px 34px 24px;
+      background: linear-gradient(120deg, rgba(138, 74, 46, 0.09), rgba(30, 114, 133, 0.07));
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 8px 0 8px;
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      margin: 0;
+      color: #62574b;
+      font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+      max-width: 66ch;
+    }
+
+    .stamp {
+      background: #fff8ec;
+      border: 1px solid #e7d8be;
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-width: 220px;
+      text-align: right;
+    }
+
+    .stamp strong {
+      display: block;
+      font-size: 1.1rem;
+    }
+
+    .time {
+      color: #6e655c;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .top-actions {
+      display: grid;
+      gap: 10px;
+      justify-items: end;
+    }
+
+    .scenario-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: end;
+    }
+
+    .scenario-btn,
+    .btn-flat {
+      border: 1px solid #dfcfb7;
+      background: #fff8ec;
+      color: #4e3f32;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+
+    .scenario-btn.active {
+      background: linear-gradient(120deg, #8a4a2e, #af6544);
+      color: #fff5ee;
+      border-color: #8a4a2e;
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 14px;
+      padding: 24px 24px 6px;
+    }
+
+    .kpi {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 22px rgba(40, 28, 17, 0.08);
+      animation: intro 640ms ease forwards;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .kpi:nth-child(2) { animation-delay: 80ms; }
+    .kpi:nth-child(3) { animation-delay: 140ms; }
+    .kpi:nth-child(4) { animation-delay: 200ms; }
+
+    .kpi h3 {
+      margin: 0;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #7b6d5f;
+    }
+
+    .kpi strong {
+      display: block;
+      margin-top: 10px;
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .kpi span {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--good);
+      font-weight: 700;
+    }
+
+    .kpi.flash {
+      animation: pulse 380ms ease;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 14px;
+      padding: 18px 24px 26px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 22px rgba(40, 28, 17, 0.08);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-family: "Fraunces", serif;
+      font-size: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .item {
+      border: 1px solid #eadfcd;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #fffaf0;
+    }
+
+    .item b {
+      display: block;
+      font-size: 1.02rem;
+      margin-bottom: 2px;
+    }
+
+    .item small {
+      color: #6d6359;
+      font-size: 0.84rem;
+    }
+
+    .pill {
+      background: #d7f4eb;
+      color: #145447;
+      font-weight: 700;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    .pill.warn {
+      background: #ffe5be;
+      color: #7a4816;
+    }
+
+    .pill.bad {
+      background: #ffd0d0;
+      color: #7b1e1e;
+    }
+
+    .mini {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .metric {
+      border-radius: 12px;
+      border: 1px solid #eadfcd;
+      padding: 12px;
+      background: #fff9ef;
+    }
+
+    .metric p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #776c61;
+      font-weight: 600;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.22rem;
+    }
+
+    .track {
+      height: 10px;
+      border-radius: 999px;
+      background: #e9e0d0;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sea), #37a5bf);
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 14px 24px 20px;
+      color: #6e6358;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid #e2d4be;
+      background: #fff8ea;
+      color: #594b3e;
+      padding: 5px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    @keyframes intro {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 960px) {
+      .highlights { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+      .stamp { text-align: left; }
+      .top-actions { justify-items: start; }
+      .scenario-controls { justify-content: start; }
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 12px; }
+      .top { padding: 22px 18px 16px; }
+      .highlights { padding: 14px 14px 4px; grid-template-columns: 1fr; }
+      .grid { padding: 12px 14px 16px; }
+      .foot { padding: 12px 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="top">
+      <div>
+        <div class="eyebrow">JUA HOTEL • Client Presentation</div>
+        <h1>Q4Life DOS Live Demo</h1>
+        <p class="sub">One-screen executive view of booking health, occupancy, internet monetization, and operational finance.</p>
+      </div>
+      <div class="top-actions">
+        <div class="stamp">
+          <strong>Ready for Pitch</strong>
+          <div class="time">Updated at <span id="presentTime">--:--</span></div>
+        </div>
+        <div class="scenario-controls" aria-label="Scenario switcher">
+          <button class="scenario-btn active" data-scenario="live">Live</button>
+          <button class="scenario-btn" data-scenario="peak">Peak</button>
+          <button class="scenario-btn" data-scenario="night">Night</button>
+          <button class="btn-flat" id="toggleFullscreen">Fullscreen</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="highlights">
+      <article class="kpi">
+        <h3>Revenue Today</h3>
+        <strong id="kpiRevenue">$48,500</strong>
+        <span id="kpiRevenueDelta">+12.8% week-over-week</span>
+      </article>
+      <article class="kpi">
+        <h3>Occupancy</h3>
+        <strong id="kpiOccupancy">92%</strong>
+        <span id="kpiOccupancyDelta">11 premium rooms remaining</span>
+      </article>
+      <article class="kpi">
+        <h3>Internet Sales</h3>
+        <strong id="kpiInternetSales">$1,250</strong>
+        <span id="kpiInternetSalesDelta">47 paid users active</span>
+      </article>
+      <article class="kpi">
+        <h3>Net Profit</h3>
+        <strong id="kpiNetProfit">$36,100</strong>
+        <span id="kpiNetProfitDelta">Forecast +18% this cycle</span>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Guest Flow Snapshot</h2>
+        <div class="list">
+          <div class="item">
+            <div>
+              <b>John Doe • Suite 301</b>
+              <small>Check-in confirmed, airport transfer complete</small>
+            </div>
+            <span class="pill">Checked In</span>
+          </div>
+          <div class="item">
+            <div>
+              <b>Mary Jane • Room 204</b>
+              <small>ETA 19:30, preference profile complete</small>
+            </div>
+            <span class="pill warn">Reserved</span>
+          </div>
+          <div class="item">
+            <div>
+              <b>Akili Mwangi • Suite 109</b>
+              <small>Late arrival alert for front desk follow-up</small>
+            </div>
+            <span class="pill bad">Late Arrival</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Operations Pulse</h2>
+        <div class="mini">
+          <div class="metric">
+            <p>Housekeeping Progress</p>
+            <strong>84% complete</strong>
+            <div class="track"><div class="fill" style="width:84%"></div></div>
+          </div>
+          <div class="metric">
+            <p>Bandwidth Load</p>
+            <strong>68% usage</strong>
+            <div class="track"><div class="fill" style="width:68%"></div></div>
+          </div>
+          <div class="metric">
+            <p>Loyalty Repeat Rate</p>
+            <strong>68% retention</strong>
+            <div class="track"><div class="fill" style="width:68%"></div></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="foot">
+      <span>Presentation mode is optimized for executive walkthroughs and projector screens.</span>
+      <div class="chips">
+        <span class="chip">CRM Ready</span>
+        <span class="chip">POS Synced</span>
+        <span class="chip">Finance Stable</span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const scenarioData = {
+      live: {
+        revenue: "$48,500",
+        revenueDelta: "+12.8% week-over-week",
+        occupancy: "92%",
+        occupancyDelta: "11 premium rooms remaining",
+        internetSales: "$1,250",
+        internetSalesDelta: "47 paid users active",
+        netProfit: "$36,100",
+        netProfitDelta: "Forecast +18% this cycle"
+      },
+      peak: {
+        revenue: "$55,900",
+        revenueDelta: "+18.6% demand surge",
+        occupancy: "97%",
+        occupancyDelta: "Only 4 premium rooms left",
+        internetSales: "$1,860",
+        internetSalesDelta: "61 paid users active",
+        netProfit: "$41,700",
+        netProfitDelta: "Forecast +24% this cycle"
+      },
+      night: {
+        revenue: "$44,200",
+        revenueDelta: "+8.2% steady pace",
+        occupancy: "88%",
+        occupancyDelta: "18 premium rooms remaining",
+        internetSales: "$980",
+        internetSalesDelta: "33 paid users active",
+        netProfit: "$31,400",
+        netProfitDelta: "Forecast +12% this cycle"
+      }
+    };
+
+    function updatePresentationTime() {
+      const now = new Date();
+      const value = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      document.getElementById("presentTime").textContent = value;
+    }
+
+    function applyScenario(name) {
+      const scenario = scenarioData[name];
+      if (!scenario) return;
+
+      document.getElementById("kpiRevenue").textContent = scenario.revenue;
+      document.getElementById("kpiRevenueDelta").textContent = scenario.revenueDelta;
+      document.getElementById("kpiOccupancy").textContent = scenario.occupancy;
+      document.getElementById("kpiOccupancyDelta").textContent = scenario.occupancyDelta;
+      document.getElementById("kpiInternetSales").textContent = scenario.internetSales;
+      document.getElementById("kpiInternetSalesDelta").textContent = scenario.internetSalesDelta;
+      document.getElementById("kpiNetProfit").textContent = scenario.netProfit;
+      document.getElementById("kpiNetProfitDelta").textContent = scenario.netProfitDelta;
+
+      document.querySelectorAll(".scenario-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.scenario === name);
+      });
+
+      document.querySelectorAll(".kpi").forEach((card) => {
+        card.classList.remove("flash");
+        void card.offsetWidth;
+        card.classList.add("flash");
+      });
+    }
+
+    function setupPresentationControls() {
+      document.querySelectorAll(".scenario-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyScenario(btn.dataset.scenario));
+      });
+
+      const fullscreenButton = document.getElementById("toggleFullscreen");
+      fullscreenButton.addEventListener("click", async () => {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+          fullscreenButton.textContent = "Exit Fullscreen";
+        } else {
+          await document.exitFullscreen();
+          fullscreenButton.textContent = "Fullscreen";
+        }
+      });
+    }
+
+    updatePresentationTime();
+    setupPresentationControls();
+    setInterval(updatePresentationTime, 30000);
+  </script>
+</body>
+</html>

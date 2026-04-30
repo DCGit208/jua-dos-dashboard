@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JUA HOTEL | Q4Life DOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f7f2e8; --ink:#2a2218; --panel:#fffdf7; --soft:#fbf6ee;
+      --brand:#8c4b2f; --gold:#d9a441; --sea:#23697a;
+      --line:#e3d7c4; --good:#2f9e44; --warn:#d97706; --bad:#d64545;
+      --shadow:0 16px 32px rgba(30,20,10,0.10);
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Manrope",sans-serif;color:var(--ink);
+      background:radial-gradient(circle at 6% 6%,rgba(140,75,47,.17),transparent 34%),
+        radial-gradient(circle at 94% 12%,rgba(35,105,122,.14),transparent 30%),
+        radial-gradient(circle at 18% 92%,rgba(217,164,65,.2),transparent 34%),
+        var(--bg);min-height:100vh;}
+    .dashboard{display:grid;grid-template-columns:256px 1fr;min-height:100vh;}
+
+    /* SIDEBAR */
+    .sidebar{background:linear-gradient(180deg,#5d2f1f,#4a271a 46%,#2e1811);
+      color:#fff6ea;padding:20px 14px;border-right:1px solid rgba(255,255,255,.07);
+      position:sticky;top:0;height:100vh;overflow-y:auto;}
+    .logo{font-family:"Space Grotesk",sans-serif;font-size:.98rem;font-weight:700;
+      margin-bottom:4px;display:flex;align-items:center;gap:9px;}
+    .logo-badge{width:30px;height:30px;border-radius:8px;flex-shrink:0;
+      background:linear-gradient(135deg,var(--gold),#f7c37f);color:#4f3314;
+      display:grid;place-items:center;font-weight:800;font-size:.76rem;}
+    .logo-sub{margin:0 0 16px;color:rgba(255,244,227,.56);font-size:.73rem;line-height:1.4;}
+    .menu-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+      color:rgba(255,244,227,.38);padding:0 10px;margin:12px 0 4px;}
+    .menu{display:grid;gap:3px;}
+    .nav-item{border:0;background:transparent;color:#ffeed8;text-align:left;
+      border-radius:9px;padding:10px 11px;cursor:pointer;font-size:.88rem;
+      font-family:inherit;display:flex;align-items:center;gap:9px;width:100%;
+      transition:transform 170ms ease,background-color 170ms ease;}
+    .nav-item .icon{font-size:.95rem;opacity:.82;width:18px;flex-shrink:0;}
+    .nav-item:hover{background:rgba(255,255,255,.09);transform:translateX(3px);}
+    .nav-item.active{background:linear-gradient(135deg,rgba(217,164,65,.28),rgba(255,255,255,.07));
+      border:1px solid rgba(255,255,255,.17);}
+    .sb-foot{margin-top:20px;padding:11px;border:1px solid rgba(255,255,255,.1);
+      border-radius:9px;background:rgba(255,255,255,.05);}
+    .sb-foot strong{display:block;font-size:.78rem;color:#ffeac0;}
+    .sb-foot span{font-size:.7rem;color:rgba(255,244,227,.48);}
+
+    /* MAIN */
+    main{padding:24px 24px 44px;overflow:auto;}
+
+    /* VIEWS */
+    .view{display:none;}
+    .view.active{display:block;animation:fadeUp 300ms ease forwards;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+    /* VIEW HEADER */
+    .vh{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;
+      margin-bottom:18px;flex-wrap:wrap;}
+    .vh h1{margin:0;font-family:"Space Grotesk",sans-serif;
+      font-size:clamp(1.45rem,2.6vw,1.95rem);letter-spacing:-.02em;}
+    .vh p{margin:5px 0 0;color:#6b5e52;font-size:.86rem;}
+    .va{display:flex;gap:9px;flex-wrap:wrap;}
+    .btn{border:0;border-radius:9px;padding:9px 15px;font-weight:700;cursor:pointer;
+      font-family:inherit;font-size:.85rem;}
+    .btn-p{background:linear-gradient(135deg,var(--brand),#b36241);color:#fff8f0;
+      box-shadow:0 7px 14px rgba(140,75,47,.26);}
+    .btn-s{background:var(--panel);border:1px solid var(--line);color:var(--ink);}
+
+    /* STAT STRIP */
+    .ss{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:11px;margin-bottom:15px;}
+    .stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;
+      padding:13px 15px;box-shadow:var(--shadow);
+      animation:riseIn 500ms ease forwards;opacity:0;transform:translateY(9px);}
+    .stat:nth-child(2){animation-delay:55ms}
+    .stat:nth-child(3){animation-delay:105ms}
+    .stat:nth-child(4){animation-delay:155ms}
+    .stat h3{margin:0;color:#6b5e52;font-size:.74rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.04em;}
+    .stat .v{margin-top:8px;font-size:1.5rem;font-weight:800;}
+    .stat .d{margin-top:3px;font-size:.77rem;font-weight:700;}
+    .d.g{color:var(--good)} .d.w{color:var(--warn)} .d.b{color:var(--bad)} .d.n{color:#6b5e52}
+
+    /* SIGNAL STRIP */
+    .sig-row{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));
+      gap:9px;margin-bottom:16px;}
+    .sig{border:1px solid var(--line);background:linear-gradient(120deg,#fffdf7,#fbf3e5);
+      border-radius:11px;padding:9px 11px;font-size:.78rem;color:#6b5e52;}
+    .sig strong{display:block;margin-top:3px;font-size:.92rem;color:var(--ink);}
+
+    /* COLUMNS */
+    .c2{display:grid;grid-template-columns:2fr 1fr;gap:13px;margin-bottom:14px;}
+    .c2e{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px;}
+    .c3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:14px;}
+
+    /* PANEL */
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;
+      box-shadow:var(--shadow);padding:15px;
+      animation:riseIn 540ms 70ms ease forwards;opacity:0;transform:translateY(9px);}
+    .panel h2{margin:0 0 13px;font-family:"Space Grotesk",sans-serif;font-size:.97rem;
+      display:flex;justify-content:space-between;align-items:center;}
+    .pbadge{font-size:.7rem;font-weight:700;border-radius:999px;padding:3px 8px;
+      background:#ffe5bf;color:#7a4816;}
+
+    /* TABLE */
+    table{width:100%;border-collapse:collapse;font-size:.86rem;}
+    th,td{text-align:left;padding:9px 7px;border-bottom:1px solid #ede6d8;}
+    th{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:#7a6e65;}
+    tr:last-child td{border-bottom:0;}
+
+    /* PILLS */
+    .pill{display:inline-flex;padding:3px 9px;border-radius:999px;
+      font-size:.73rem;font-weight:700;white-space:nowrap;}
+    .pg{color:#113f38;background:#cdf6ea}
+    .po{color:#6f3b0d;background:#ffe3bf}
+    .pr{color:#6d1313;background:#ffc9c9}
+    .pb{color:#0d2f5c;background:#c6ddff}
+    .pn{color:#444;background:#e8e4dc}
+    .pgo{color:#5a3a0a;background:#fef0cb}
+
+    /* MINI */
+    .mini{border-radius:9px;padding:10px 11px;border:1px solid #ede6d8;
+      background:var(--soft);margin-bottom:7px;}
+    .mini:last-of-type{margin-bottom:0;}
+    .mini .ml{color:#7a6e65;font-size:.76rem;}
+    .mini strong{display:block;font-size:1rem;margin-top:2px;}
+
+    /* BARS */
+    .br{margin-bottom:9px;}
+    .bl{display:flex;justify-content:space-between;font-size:.8rem;color:#5a5047;margin-bottom:3px;}
+    .bl span:last-child{font-weight:700;}
+    .bt{width:100%;height:8px;border-radius:999px;background:#e8e2d5;overflow:hidden;}
+    .bf{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sea),#3296b2);}
+    .bf.bb{background:linear-gradient(90deg,var(--brand),#c16242);}
+    .bf.bg{background:linear-gradient(90deg,var(--gold),#f0c868);}
+
+    /* ROOM GRID */
+    .rgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;}
+    .rc{aspect-ratio:1;border-radius:7px;display:grid;place-items:center;
+      font-size:.67rem;font-weight:700;border:1px solid transparent;}
+    .rc.occ{background:#cdf6ea;color:#113f38;border-color:#a8e8d0;}
+    .rc.res{background:#ffe3bf;color:#6f3b0d;border-color:#ffd09e;}
+    .rc.vac{background:#f0ece2;color:#7a6e65;border-color:#e0dace;}
+    .rc.hk {background:#c6ddff;color:#0d2f5c;border-color:#a6c9ff;}
+    .rc.mnt{background:#ffc9c9;color:#6d1313;border-color:#ffaaaa;}
+    .rleg{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:.74rem;}
+    .ri{display:flex;align-items:center;gap:4px;}
+    .rd{width:9px;height:9px;border-radius:3px;}
+
+    /* CHIPS */
+    .cr{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+    .chip{font-size:.72rem;font-weight:700;border-radius:999px;padding:4px 9px;
+      color:#26423f;background:#d9f5ee;border:1px solid #b7eadf;}
+    .chip.go{color:#5a3a0a;background:#fef0cb;border-color:#f5d87a;}
+    .chip.bl2{color:#0d2f5c;background:#dceeff;border-color:#a6c9ff;}
+
+    /* FOOT NOTE */
+    .fn{margin-top:11px;color:#7a6e65;font-size:.76rem;border-top:1px solid #ede6d8;padding-top:9px;}
+
+    /* REPORT ROW */
+    .rr{display:flex;justify-content:space-between;align-items:center;
+      padding:10px 7px;border-bottom:1px solid #ede6d8;font-size:.86rem;}
+    .rr:last-child{border-bottom:0;}
+    .rr small{color:#7a6e65;font-size:.75rem;display:block;margin-top:1px;}
+
+    /* ANIMATION */
+    @keyframes riseIn{to{opacity:1;transform:translateY(0)}}
+
+    /* RESPONSIVE */
+    @media(max-width:1100px){
+      .dashboard{grid-template-columns:1fr;}
+      .sidebar{position:static;height:auto;}
+      .menu{grid-template-columns:repeat(4,minmax(90px,1fr));}
+    }
+    @media(max-width:780px){
+      .sidebar{padding:14px 0 12px;position:sticky;top:0;z-index:40;box-shadow:0 8px 18px rgba(0,0,0,.2);height:auto;overflow:hidden;}
+      .logo,.logo-sub{padding:0 12px;}
+      .menu-label{display:none;}
+      .menu{display:flex;gap:8px;overflow-x:auto;padding:0 12px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+      .menu::-webkit-scrollbar{display:none;}
+      .nav-item{width:auto;min-width:max-content;min-height:42px;padding:11px 14px;flex:0 0 auto;
+        background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);}
+      .nav-item:hover{transform:none;}
+      .ss,.sig-row{grid-template-columns:repeat(2,minmax(130px,1fr));}
+      .c2,.c2e,.c3{grid-template-columns:1fr;}
+      .rgrid{grid-template-columns:repeat(4,1fr);}
+      .logo-sub{margin-bottom:8px;}
+      .btn{min-height:42px;}
+      .panel{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
+      .sb-foot{display:none;}
+    }
+    @media(max-width:460px){
+      .ss,.sig-row{grid-template-columns:1fr;}
+      main{padding:14px 12px 30px;}
+      .vh{align-items:flex-start;}
+      .va{width:100%;}
+      .va .btn{flex:1;}
+      .panel{padding:12px;}
+      .rgrid{grid-template-columns:repeat(3,1fr);}
+      .rr{gap:8px;}
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo"><span class="logo-badge">JH</span>JUA HOTEL x Q4Life</div>
+    <p class="logo-sub">Digital Operating System &mdash; DOS<br>Client Demo v1.0</p>
+    <div class="menu-label">Overview</div>
+    <nav class="menu">
+      <a class="nav-item active" data-view="dashboard" href="#dashboard"><span class="icon">&#9675;</span>Dashboard</a>
+      <a class="nav-item" data-view="bookings" href="#bookings"><span class="icon">&#128197;</span>Bookings</a>
+      <a class="nav-item" data-view="crm" href="#crm"><span class="icon">&#129504;</span>CRM</a>
+    </nav>
+    <div class="menu-label">Operations</div>
+    <nav class="menu">
+      <a class="nav-item" data-view="pos" href="#pos"><span class="icon">&#127869;</span>POS</a>
+      <a class="nav-item" data-view="rooms" href="#rooms"><span class="icon">&#127968;</span>Rooms (PMS)</a>
+      <a class="nav-item" data-view="internet" href="#internet"><span class="icon">&#128225;</span>Internet Sales</a>
+    </nav>
+    <div class="menu-label">Enterprise</div>
+    <nav class="menu">
+      <a class="nav-item" data-view="finance" href="#finance"><span class="icon">&#128188;</span>Finance (ERP)</a>
+      <a class="nav-item" data-view="reports" href="#reports"><span class="icon">&#128202;</span>Reports</a>
+    </nav>
+    <div class="sb-foot">
+      <strong>Q4Life DOS v1.0</strong>
+      <span>JUA HOTEL &middot; Demo build</span>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- ============================================================ DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="vh">
+        <div><h1>Executive Dashboard</h1>
+          <p>Live snapshot &middot; JUA HOTEL &middot; <span id="liveTime">--:--</span></p></div>
+        <div class="va">
+          <button class="btn btn-s">Generate Report</button>
+          <button class="btn btn-p">+ New Booking</button>
+        </div>
+      </div>
+      <section class="sig-row">
+        <article class="sig">Arrival Pressure<strong>23 arrivals before 8 PM</strong></article>
+        <article class="sig">Upsell Potential<strong>$1,840 in opportunities</strong></article>
+        <article class="sig">POS Peak Window<strong>19:00&ndash;22:00 rush</strong></article>
+        <article class="sig">Guest Sentiment<strong>4.7 / 5 &mdash; 112 reviews</strong></article>
+      </section>
+      <section class="ss">
+        <article class="stat"><h3>Total Revenue</h3><div class="v">$48,500</div><div class="d g">+12.8% vs last week</div></article>
+        <article class="stat"><h3>Occupancy</h3><div class="v">92%</div><div class="d g">+4.2 pts</div></article>
+        <article class="stat"><h3>Active Guests</h3><div class="v">128</div><div class="d w">Peak checkout 11:00</div></article>
+        <article class="stat"><h3>Internet Sales</h3><div class="v">$1,250</div><div class="d g">+18.6% today</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Recent Bookings <span class="pbadge">Live</span></h2>
+          <table><thead><tr><th>Guest</th><th>Room</th><th>Status</th><th>Check-in</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>John Doe</td><td>Suite 301</td><td><span class="pill pg">Checked In</span></td><td>Today</td><td>$350</td></tr>
+            <tr><td>Mary Jane</td><td>Room 204</td><td><span class="pill po">Reserved</span></td><td>Tomorrow</td><td>$120</td></tr>
+            <tr><td>Akili Mwangi</td><td>Suite 109</td><td><span class="pill pr">Late Arrival</span></td><td>Today</td><td>$420</td></tr>
+            <tr><td>Isabella Cruz</td><td>Room 220</td><td><span class="pill pg">Checked In</span></td><td>Today</td><td>$160</td></tr>
+            <tr><td>Daniel Toma</td><td>Room 115</td><td><span class="pill pb">Confirmed</span></td><td>+2 days</td><td>$95</td></tr>
+          </tbody></table>
+          <div class="fn">Synced with booking engine 30 seconds ago.</div>
+        </article>
+        <article class="panel">
+          <h2>Operations Pulse</h2>
+          <div class="mini"><div class="ml">WiFi Users Today</div><strong>47 active sessions</strong></div>
+          <div class="mini"><div class="ml">POS Avg Ticket</div><strong>$18.50</strong></div>
+          <div class="mini"><div class="ml">Housekeeping</div><strong>84% rooms ready</strong></div>
+          <div style="margin-top:13px">
+            <div class="br"><div class="bl"><span>Bandwidth</span><span>68%</span></div><div class="bt"><div class="bf" style="width:68%"></div></div></div>
+            <div class="br"><div class="bl"><span>Occupancy</span><span>92%</span></div><div class="bt"><div class="bf bb" style="width:92%"></div></div></div>
+            <div class="br"><div class="bl"><span>Loyalty Rate</span><span>68%</span></div><div class="bt"><div class="bf bg" style="width:68%"></div></div></div>
+          </div>
+        </article>
+      </section>
+      <section class="c2e">
+        <article class="panel">
+          <h2>Customer Intelligence</h2>
+          <div class="mini"><div class="ml">Top Customer</div><strong>Michael O. &middot; $4,200 total</strong></div>
+          <div class="mini"><div class="ml">Loyalty Members</div><strong>342 guests enrolled</strong></div>
+          <div class="mini"><div class="ml">Average Spend / Visit</div><strong>$120</strong></div>
+          <div class="cr"><span class="chip">Anniversary campaign</span><span class="chip">VIP upsell ready</span><span class="chip">Repeat rewards live</span></div>
+        </article>
+        <article class="panel">
+          <h2>Finance Snapshot</h2>
+          <div class="mini"><div class="ml">Net Profit</div><strong>$36,100</strong></div>
+          <div class="mini"><div class="ml">Expenses</div><strong>$12,400 (on budget)</strong></div>
+          <div class="mini"><div class="ml">Cash Flow</div><strong>Positive &#10003;</strong></div>
+          <div class="cr"><span class="chip">Payroll aligned</span><span class="chip">No overdue invoices</span><span class="chip go">Forecast +18%</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ BOOKINGS -->
+    <div class="view" id="view-bookings">
+      <div class="vh">
+        <div><h1>Bookings</h1><p>Booking engine &middot; Real-time availability &amp; reservations</p></div>
+        <div class="va"><button class="btn btn-s">Availability Calendar</button><button class="btn btn-p">+ New Reservation</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Today's Arrivals</h3><div class="v">23</div><div class="d g">8 confirmed online</div></article>
+        <article class="stat"><h3>Departures Today</h3><div class="v">14</div><div class="d n">2 pending checkout</div></article>
+        <article class="stat"><h3>Pending Confirm</h3><div class="v">7</div><div class="d w">3 require action</div></article>
+        <article class="stat"><h3>Monthly Revenue</h3><div class="v">$142,600</div><div class="d g">+9.4% vs last month</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Reservation List <span class="pbadge">30 today</span></h2>
+          <table><thead><tr><th>Guest</th><th>Room</th><th>Arrival</th><th>Departure</th><th>Nights</th><th>Source</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>John Doe</td><td>Suite 301</td><td>30 Apr</td><td>3 May</td><td>3</td><td>Direct</td><td><span class="pill pg">Checked In</span></td></tr>
+            <tr><td>Mary Jane</td><td>Room 204</td><td>1 May</td><td>4 May</td><td>3</td><td>Booking.com</td><td><span class="pill po">Reserved</span></td></tr>
+            <tr><td>Akili Mwangi</td><td>Suite 109</td><td>30 Apr</td><td>2 May</td><td>2</td><td>Direct</td><td><span class="pill pr">Late Arrival</span></td></tr>
+            <tr><td>Isabella Cruz</td><td>Room 220</td><td>30 Apr</td><td>5 May</td><td>5</td><td>Website</td><td><span class="pill pg">Checked In</span></td></tr>
+            <tr><td>Daniel Toma</td><td>Room 115</td><td>2 May</td><td>7 May</td><td>5</td><td>Direct</td><td><span class="pill pb">Confirmed</span></td></tr>
+            <tr><td>Laure Nguema</td><td>Suite 308</td><td>4 May</td><td>6 May</td><td>2</td><td>Airbnb</td><td><span class="pill pb">Confirmed</span></td></tr>
+            <tr><td>Omar Hassan</td><td>Room 310</td><td>5 May</td><td>8 May</td><td>3</td><td>Walk-in</td><td><span class="pill pn">Pending</span></td></tr>
+          </tbody></table>
+          <div class="fn">Booking engine synced &mdash; auto-confirmations sent via SMS &amp; Email.</div>
+        </article>
+        <article class="panel">
+          <h2>Booking Sources</h2>
+          <div class="br"><div class="bl"><span>Direct / Website</span><span>42%</span></div><div class="bt"><div class="bf bb" style="width:42%"></div></div></div>
+          <div class="br"><div class="bl"><span>Booking.com</span><span>28%</span></div><div class="bt"><div class="bf" style="width:28%"></div></div></div>
+          <div class="br"><div class="bl"><span>Airbnb</span><span>16%</span></div><div class="bt"><div class="bf bg" style="width:16%"></div></div></div>
+          <div class="br"><div class="bl"><span>Walk-in</span><span>14%</span></div><div class="bt"><div class="bf" style="width:14%"></div></div></div>
+          <h2 style="margin-top:15px">Upcoming 7 Days</h2>
+          <div class="mini"><div class="ml">Arrivals</div><strong>47 guests</strong></div>
+          <div class="mini"><div class="ml">Departures</div><strong>39 guests</strong></div>
+          <div class="mini"><div class="ml">Revenue Projected</div><strong>$18,400</strong></div>
+          <div class="cr"><span class="chip">Auto-confirm on</span><span class="chip">Dynamic pricing active</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ CRM -->
+    <div class="view" id="view-crm">
+      <div class="vh">
+        <div><h1>CRM</h1><p>Customer intelligence &middot; Loyalty &amp; lifecycle management</p></div>
+        <div class="va"><button class="btn btn-s">Export Contacts</button><button class="btn btn-p">+ Add Guest Profile</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Total Registered</h3><div class="v">1,284</div><div class="d g">+34 this week</div></article>
+        <article class="stat"><h3>Loyalty Members</h3><div class="v">342</div><div class="d g">+12 new this month</div></article>
+        <article class="stat"><h3>VIP Guests</h3><div class="v">28</div><div class="d n">Avg spend $380/visit</div></article>
+        <article class="stat"><h3>Repeat Rate</h3><div class="v">68%</div><div class="d g">+8 pts vs last quarter</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Guest Profiles <span class="pbadge">Top Active</span></h2>
+          <table><thead><tr><th>Name</th><th>Segment</th><th>Visits</th><th>Total Spend</th><th>Last Visit</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Michael Ondo</td><td>VIP</td><td>14</td><td>$4,200</td><td>25 Apr</td><td><span class="pill pgo">VIP</span></td></tr>
+            <tr><td>Emilie Nkono</td><td>Loyalty</td><td>8</td><td>$1,960</td><td>28 Apr</td><td><span class="pill pg">Active</span></td></tr>
+            <tr><td>Carlos Diaz</td><td>Corporate</td><td>6</td><td>$1,450</td><td>20 Apr</td><td><span class="pill pb">Corporate</span></td></tr>
+            <tr><td>Mary Jane</td><td>Loyalty</td><td>5</td><td>$890</td><td>Today</td><td><span class="pill pg">Active</span></td></tr>
+            <tr><td>Aiko Tanaka</td><td>New</td><td>1</td><td>$240</td><td>Today</td><td><span class="pill po">New</span></td></tr>
+          </tbody></table>
+          <div class="fn">Guest data captured at check-in, WiFi login, and POS transactions.</div>
+        </article>
+        <article class="panel">
+          <h2>Loyalty Tiers</h2>
+          <div class="br"><div class="bl"><span>VIP &mdash; Top Tier</span><span>28</span></div><div class="bt"><div class="bf bg" style="width:22%"></div></div></div>
+          <div class="br"><div class="bl"><span>Gold &mdash; Loyalty</span><span>96</span></div><div class="bt"><div class="bf bb" style="width:50%"></div></div></div>
+          <div class="br"><div class="bl"><span>Silver &mdash; Regular</span><span>218</span></div><div class="bt"><div class="bf" style="width:74%"></div></div></div>
+          <h2 style="margin-top:14px">Active Campaigns</h2>
+          <div class="mini"><div class="ml">Anniversary Offer</div><strong>14 guests eligible &middot; $420 projected</strong></div>
+          <div class="mini"><div class="ml">VIP Suite Upgrade</div><strong>8 targeted &middot; $640 potential</strong></div>
+          <div class="mini"><div class="ml">Repeat Guest Discount (10%)</div><strong>Auto-applied at booking</strong></div>
+          <div class="cr"><span class="chip">SMS campaigns live</span><span class="chip bl2">Subscription model planned</span></div>
+        </article>
+      </section>
+      <section class="c2e">
+        <article class="panel">
+          <h2>Spending Patterns</h2>
+          <div class="br"><div class="bl"><span>Room Revenue</span><span>58%</span></div><div class="bt"><div class="bf bb" style="width:58%"></div></div></div>
+          <div class="br"><div class="bl"><span>F&amp;B / Restaurant</span><span>24%</span></div><div class="bt"><div class="bf" style="width:24%"></div></div></div>
+          <div class="br"><div class="bl"><span>Internet / WiFi</span><span>11%</span></div><div class="bt"><div class="bf bg" style="width:11%"></div></div></div>
+          <div class="br"><div class="bl"><span>Events / Other</span><span>7%</span></div><div class="bt"><div class="bf" style="width:7%"></div></div></div>
+        </article>
+        <article class="panel">
+          <h2>Acquisition Sources</h2>
+          <div class="mini"><div class="ml">Website Direct</div><strong>34% of new guests</strong></div>
+          <div class="mini"><div class="ml">Walk-in / Referral</div><strong>28%</strong></div>
+          <div class="mini"><div class="ml">Online Travel Agents</div><strong>24%</strong></div>
+          <div class="mini"><div class="ml">Social Media</div><strong>14%</strong></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ POS -->
+    <div class="view" id="view-pos">
+      <div class="vh">
+        <div><h1>POS</h1><p>Point of Sale &middot; Restaurant, Bar &amp; Event sales</p></div>
+        <div class="va"><button class="btn btn-s">Print Z-Report</button><button class="btn btn-p">+ New Order</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>POS Revenue Today</h3><div class="v">$2,840</div><div class="d g">+22% vs yesterday</div></article>
+        <article class="stat"><h3>Open Orders</h3><div class="v">9</div><div class="d w">3 tables pending</div></article>
+        <article class="stat"><h3>Avg Ticket Size</h3><div class="v">$18.50</div><div class="d g">+$2.40 vs last week</div></article>
+        <article class="stat"><h3>Covers Served</h3><div class="v">154</div><div class="d g">+18 vs yesterday</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Active &amp; Recent Orders <span class="pbadge">9 open</span></h2>
+          <table><thead><tr><th>Order</th><th>Table / Room</th><th>Items</th><th>Total</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>#T-041</td><td>Table 4</td><td>3 items</td><td>$54</td><td>2 min ago</td><td><span class="pill po">Preparing</span></td></tr>
+            <tr><td>#T-040</td><td>Table 7</td><td>5 items</td><td>$87</td><td>8 min ago</td><td><span class="pill po">Preparing</span></td></tr>
+            <tr><td>#R-301</td><td>Suite 301</td><td>2 items</td><td>$42</td><td>12 min ago</td><td><span class="pill pb">Delivered</span></td></tr>
+            <tr><td>#T-039</td><td>Table 2</td><td>4 items</td><td>$66</td><td>20 min ago</td><td><span class="pill pg">Paid</span></td></tr>
+            <tr><td>#B-012</td><td>Bar Counter</td><td>6 items</td><td>$38</td><td>25 min ago</td><td><span class="pill pg">Paid</span></td></tr>
+            <tr><td>#T-038</td><td>Table 9</td><td>2 items</td><td>$24</td><td>31 min ago</td><td><span class="pill pg">Paid</span></td></tr>
+          </tbody></table>
+          <div class="fn">Orders auto-sync to kitchen display and billing system.</div>
+        </article>
+        <article class="panel">
+          <h2>Revenue by Outlet</h2>
+          <div class="br"><div class="bl"><span>Restaurant</span><span>$1,480</span></div><div class="bt"><div class="bf bb" style="width:52%"></div></div></div>
+          <div class="br"><div class="bl"><span>Bar &amp; Lounge</span><span>$780</span></div><div class="bt"><div class="bf" style="width:28%"></div></div></div>
+          <div class="br"><div class="bl"><span>Room Service</span><span>$380</span></div><div class="bt"><div class="bf bg" style="width:13%"></div></div></div>
+          <div class="br"><div class="bl"><span>Events / Catering</span><span>$200</span></div><div class="bt"><div class="bf" style="width:7%"></div></div></div>
+          <h2 style="margin-top:14px">Top Selling Items</h2>
+          <div class="mini"><div class="ml">1. Grilled Tilapia</div><strong>34 orders &middot; $578</strong></div>
+          <div class="mini"><div class="ml">2. House Cocktails</div><strong>28 orders &middot; $224</strong></div>
+          <div class="mini"><div class="ml">3. Grilled Chicken Platter</div><strong>22 orders &middot; $396</strong></div>
+          <div class="cr"><span class="chip">Inventory synced</span><span class="chip">VAT auto-calculated</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ ROOMS (PMS) -->
+    <div class="view" id="view-rooms">
+      <div class="vh">
+        <div><h1>Rooms (PMS)</h1><p>Property Management &middot; Occupancy, allocations &amp; housekeeping</p></div>
+        <div class="va"><button class="btn btn-s">Print Room List</button><button class="btn btn-p">Check In Guest</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Total Rooms</h3><div class="v">52</div><div class="d n">All floors active</div></article>
+        <article class="stat"><h3>Occupied</h3><div class="v">48</div><div class="d g">92% occupancy</div></article>
+        <article class="stat"><h3>Available</h3><div class="v">4</div><div class="d w">2 in housekeeping</div></article>
+        <article class="stat"><h3>Maintenance</h3><div class="v">1</div><div class="d b">Room 212 &mdash; plumbing</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Room Status Grid <span class="pbadge">Floor View</span></h2>
+          <div class="rgrid">
+            <div class="rc occ">101</div><div class="rc occ">102</div><div class="rc occ">103</div>
+            <div class="rc occ">104</div><div class="rc occ">105</div><div class="rc res">106</div>
+            <div class="rc occ">107</div><div class="rc occ">108</div><div class="rc occ">109</div>
+            <div class="rc hk">110</div><div class="rc vac">111</div><div class="rc occ">112</div>
+            <div class="rc occ">201</div><div class="rc occ">202</div><div class="rc occ">203</div>
+            <div class="rc res">204</div><div class="rc occ">205</div><div class="rc occ">206</div>
+            <div class="rc occ">207</div><div class="rc occ">208</div><div class="rc hk">209</div>
+            <div class="rc occ">210</div><div class="rc occ">211</div><div class="rc mnt">212</div>
+            <div class="rc occ">301</div><div class="rc occ">302</div><div class="rc occ">303</div>
+            <div class="rc occ">304</div><div class="rc occ">305</div><div class="rc occ">306</div>
+            <div class="rc occ">307</div><div class="rc res">308</div><div class="rc occ">309</div>
+            <div class="rc occ">310</div><div class="rc occ">311</div><div class="rc vac">312</div>
+          </div>
+          <div class="rleg">
+            <div class="ri"><div class="rd" style="background:#cdf6ea;border:1px solid #a8e8d0"></div>Occupied (48)</div>
+            <div class="ri"><div class="rd" style="background:#ffe3bf;border:1px solid #ffd09e"></div>Reserved (3)</div>
+            <div class="ri"><div class="rd" style="background:#c6ddff;border:1px solid #a6c9ff"></div>Housekeeping (2)</div>
+            <div class="ri"><div class="rd" style="background:#f0ece2;border:1px solid #e0dace"></div>Vacant (2)</div>
+            <div class="ri"><div class="rd" style="background:#ffc9c9;border:1px solid #ffaaaa"></div>Maintenance (1)</div>
+          </div>
+        </article>
+        <article class="panel">
+          <h2>Today's Movements</h2>
+          <div class="mini"><div class="ml">Check-ins Today</div><strong>23 guests arriving</strong></div>
+          <div class="mini"><div class="ml">Check-outs Today</div><strong>14 guests departing</strong></div>
+          <div class="mini"><div class="ml">Room Upgrades</div><strong>3 upgrades processed</strong></div>
+          <div class="mini"><div class="ml">Early Check-in Requests</div><strong>5 pending approval</strong></div>
+          <h2 style="margin-top:14px">Housekeeping</h2>
+          <div class="br"><div class="bl"><span>Rooms Cleaned</span><span>44 / 52</span></div><div class="bt"><div class="bf bb" style="width:84%"></div></div></div>
+          <div class="br"><div class="bl"><span>Priority (Checkouts)</span><span>12 / 14</span></div><div class="bt"><div class="bf" style="width:86%"></div></div></div>
+          <div class="cr"><span class="chip">Auto allocation on</span><span class="chip go">Dynamic pricing active</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ INTERNET SALES -->
+    <div class="view" id="view-internet">
+      <div class="vh">
+        <div><h1>Internet Sales</h1><p>Q4Life Connect &middot; Captive portal monetization &amp; bandwidth control</p></div>
+        <div class="va"><button class="btn btn-s">Manage Plans</button><button class="btn btn-p">+ Issue Access Code</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Revenue Today</h3><div class="v">$1,250</div><div class="d g">+18.6% vs yesterday</div></article>
+        <article class="stat"><h3>Active Users</h3><div class="v">47</div><div class="d g">12 just connected</div></article>
+        <article class="stat"><h3>Bandwidth Load</h3><div class="v">68%</div><div class="d w">Peak at 21:00</div></article>
+        <article class="stat"><h3>Monthly Revenue</h3><div class="v">$14,800</div><div class="d g">+24% this month</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Active Sessions <span class="pbadge">47 live</span></h2>
+          <table><thead><tr><th>User / Room</th><th>Plan</th><th>Started</th><th>Expires</th><th>Data Used</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Suite 301 &mdash; J. Doe</td><td>Day Pass</td><td>08:24</td><td>23:59</td><td>2.1 GB</td><td><span class="pill pg">Active</span></td></tr>
+            <tr><td>Room 204 &mdash; M. Jane</td><td>Week Pass</td><td>14:00</td><td>7 May</td><td>840 MB</td><td><span class="pill pg">Active</span></td></tr>
+            <tr><td>Suite 109 &mdash; Visitor</td><td>Day Pass</td><td>10:15</td><td>23:59</td><td>1.4 GB</td><td><span class="pill pg">Active</span></td></tr>
+            <tr><td>Lobby &mdash; Guest</td><td>Free (30 min)</td><td>16:42</td><td>17:12</td><td>120 MB</td><td><span class="pill po">Expiring</span></td></tr>
+            <tr><td>Room 220 &mdash; I. Cruz</td><td>Month Pass</td><td>28 Apr</td><td>28 May</td><td>14.2 GB</td><td><span class="pill pb">Premium</span></td></tr>
+          </tbody></table>
+          <div class="fn">QR code validation active &middot; Auto-expiry enforcement on.</div>
+        </article>
+        <article class="panel">
+          <h2>Plan Mix</h2>
+          <div class="br"><div class="bl"><span>Day Pass &mdash; 2,000 FCFA</span><span>63%</span></div><div class="bt"><div class="bf bb" style="width:63%"></div></div></div>
+          <div class="br"><div class="bl"><span>Week Pass &mdash; 8,000 FCFA</span><span>22%</span></div><div class="bt"><div class="bf" style="width:22%"></div></div></div>
+          <div class="br"><div class="bl"><span>Month Pass &mdash; 20,000 FCFA</span><span>10%</span></div><div class="bt"><div class="bf bg" style="width:10%"></div></div></div>
+          <div class="br"><div class="bl"><span>Free Lobby Trial</span><span>5%</span></div><div class="bt"><div class="bf" style="width:5%"></div></div></div>
+          <h2 style="margin-top:14px">Bandwidth by Zone</h2>
+          <div class="mini"><div class="ml">Floors 1&ndash;3 (Rooms)</div><strong>48% of total</strong></div>
+          <div class="mini"><div class="ml">Restaurant &amp; Bar</div><strong>31% of total</strong></div>
+          <div class="mini"><div class="ml">Lobby &amp; Event Spaces</div><strong>21% of total</strong></div>
+          <div class="cr"><span class="chip">Captive portal live</span><span class="chip">Tier throttling on</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ FINANCE (ERP) -->
+    <div class="view" id="view-finance">
+      <div class="vh">
+        <div><h1>Finance (ERP)</h1><p>Enterprise Resource Planning &middot; Full business financial control</p></div>
+        <div class="va"><button class="btn btn-s">Export to Accounting</button><button class="btn btn-p">+ New Transaction</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Total Revenue</h3><div class="v">$48,500</div><div class="d g">+12.8% this week</div></article>
+        <article class="stat"><h3>Total Expenses</h3><div class="v">$12,400</div><div class="d n">On budget &#10003;</div></article>
+        <article class="stat"><h3>Net Profit</h3><div class="v">$36,100</div><div class="d g">74.4% margin</div></article>
+        <article class="stat"><h3>Forecast (Month)</h3><div class="v">+18%</div><div class="d g">Best month on track</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Revenue Breakdown</h2>
+          <table><thead><tr><th>Department</th><th>Revenue</th><th>vs Target</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Room Bookings</td><td>$28,130</td><td>+8%</td><td><span class="pill pg">Above target</span></td></tr>
+            <tr><td>Restaurant &amp; Bar</td><td>$11,640</td><td>+22%</td><td><span class="pill pg">Above target</span></td></tr>
+            <tr><td>Internet Sales</td><td>$5,120</td><td>+38%</td><td><span class="pill pg">Above target</span></td></tr>
+            <tr><td>Events &amp; Catering</td><td>$2,400</td><td>-5%</td><td><span class="pill po">Below target</span></td></tr>
+            <tr><td>Other Services</td><td>$1,210</td><td>+2%</td><td><span class="pill pg">On target</span></td></tr>
+          </tbody></table>
+          <div class="fn">Auto-reconciliation runs daily at midnight.</div>
+        </article>
+        <article class="panel">
+          <h2>Expenses by Category</h2>
+          <div class="br"><div class="bl"><span>Payroll &amp; Benefits</span><span>$6,200</span></div><div class="bt"><div class="bf bb" style="width:50%"></div></div></div>
+          <div class="br"><div class="bl"><span>F&amp;B Procurement</span><span>$2,840</span></div><div class="bt"><div class="bf" style="width:23%"></div></div></div>
+          <div class="br"><div class="bl"><span>Utilities &amp; Infrastructure</span><span>$1,860</span></div><div class="bt"><div class="bf bg" style="width:15%"></div></div></div>
+          <div class="br"><div class="bl"><span>Maintenance &amp; Repairs</span><span>$900</span></div><div class="bt"><div class="bf" style="width:7%"></div></div></div>
+          <div class="br"><div class="bl"><span>Marketing</span><span>$600</span></div><div class="bt"><div class="bf" style="width:5%"></div></div></div>
+          <div class="cr"><span class="chip">Payroll aligned</span><span class="chip">No overdue invoices</span><span class="chip go">Cash flow positive</span></div>
+        </article>
+      </section>
+      <section class="c3">
+        <article class="panel">
+          <h2>Payroll</h2>
+          <div class="mini"><div class="ml">Total Staff</div><strong>38 employees</strong></div>
+          <div class="mini"><div class="ml">Next Payroll</div><strong>May 30, 2026</strong></div>
+          <div class="mini"><div class="ml">Monthly Budget</div><strong>$6,200</strong></div>
+          <div class="cr"><span class="chip">All contracts current</span></div>
+        </article>
+        <article class="panel">
+          <h2>Procurement</h2>
+          <div class="mini"><div class="ml">Open Purchase Orders</div><strong>4 orders pending</strong></div>
+          <div class="mini"><div class="ml">Pending Approvals</div><strong>2 require sign-off</strong></div>
+          <div class="mini"><div class="ml">Top Supplier</div><strong>FreshMart Gabon</strong></div>
+          <div class="cr"><span class="chip">No overdue POs</span></div>
+        </article>
+        <article class="panel">
+          <h2>P&amp;L Summary</h2>
+          <div class="mini"><div class="ml">Gross Revenue</div><strong>$48,500</strong></div>
+          <div class="mini"><div class="ml">Total Cost</div><strong>$12,400</strong></div>
+          <div class="mini"><div class="ml">EBITDA</div><strong>$36,100 (74%)</strong></div>
+          <div class="cr"><span class="chip go">Best month on track</span></div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ============================================================ REPORTS -->
+    <div class="view" id="view-reports">
+      <div class="vh">
+        <div><h1>Reports</h1><p>Analytics &amp; reporting &middot; Daily, monthly &amp; department breakdowns</p></div>
+        <div class="va"><button class="btn btn-s">Schedule Report</button><button class="btn btn-p">Export All (PDF)</button></div>
+      </div>
+      <section class="ss">
+        <article class="stat"><h3>Reports This Month</h3><div class="v">48</div><div class="d n">Auto-generated daily</div></article>
+        <article class="stat"><h3>Alerts Triggered</h3><div class="v">3</div><div class="d w">2 resolved &middot; 1 open</div></article>
+        <article class="stat"><h3>Data Accuracy</h3><div class="v">99.8%</div><div class="d g">All sources synced</div></article>
+        <article class="stat"><h3>Last Full Report</h3><div class="v">Today 06:00</div><div class="d g">On schedule</div></article>
+      </section>
+      <section class="c2">
+        <article class="panel">
+          <h2>Available Reports</h2>
+          <div class="rr"><div><strong>Daily Revenue Summary</strong><small>Auto-generated &middot; Last run: Today 06:00</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>Occupancy &amp; Booking Report</strong><small>Check-in/out &middot; ADR &middot; RevPAR</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>POS Sales Analysis</strong><small>By outlet &middot; By item &middot; By shift</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>Internet Revenue Report</strong><small>Plans sold &middot; Bandwidth usage &middot; Revenue</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>Guest CRM Report</strong><small>New guests &middot; Repeat rate &middot; LTV by segment</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>Finance P&amp;L Monthly</strong><small>Revenue vs expenses &middot; Profit margin</small></div><span class="pill pb">Pending close</span></div>
+          <div class="rr"><div><strong>Housekeeping Performance</strong><small>Room readiness &middot; Staff efficiency</small></div><span class="pill pg">Ready</span></div>
+          <div class="rr"><div><strong>HR Attendance Report</strong><small>38 staff tracked &middot; Shift compliance</small></div><span class="pill po">Review needed</span></div>
+        </article>
+        <article class="panel">
+          <h2>Monthly KPI Trend</h2>
+          <div class="br"><div class="bl"><span>Revenue</span><span>$142,600 / $150K target</span></div><div class="bt"><div class="bf bb" style="width:95%"></div></div></div>
+          <div class="br"><div class="bl"><span>Occupancy</span><span>88% avg</span></div><div class="bt"><div class="bf" style="width:88%"></div></div></div>
+          <div class="br"><div class="bl"><span>Internet Revenue</span><span>$14,800</span></div><div class="bt"><div class="bf bg" style="width:74%"></div></div></div>
+          <div class="br"><div class="bl"><span>POS Revenue</span><span>$54,200</span></div><div class="bt"><div class="bf" style="width:68%"></div></div></div>
+          <h2 style="margin-top:14px">Department Breakdown</h2>
+          <div class="mini"><div class="ml">Rooms (PMS)</div><strong>$82,200 &middot; 58% of total</strong></div>
+          <div class="mini"><div class="ml">F&amp;B (POS)</div><strong>$34,400 &middot; 24%</strong></div>
+          <div class="mini"><div class="ml">Internet (Connect)</div><strong>$14,800 &middot; 10%</strong></div>
+          <div class="mini"><div class="ml">Events &amp; Other</div><strong>$11,200 &middot; 8%</strong></div>
+        </article>
+      </section>
+      <section class="c2e">
+        <article class="panel">
+          <h2>Active Alerts</h2>
+          <div class="rr"><div><strong>Room 212 &mdash; Maintenance Open</strong><small>Plumbing issue &middot; 2 days unresolved</small></div><span class="pill pr">Open</span></div>
+          <div class="rr"><div><strong>HR Attendance Gap &mdash; 3 staff</strong><small>30 Apr &middot; Late clock-in flagged</small></div><span class="pill po">Review</span></div>
+          <div class="rr"><div><strong>Events Revenue Below Target</strong><small>-5% vs monthly goal &middot; Action needed</small></div><span class="pill po">Review</span></div>
+          <div class="fn">Alerts auto-generated from threshold rules in system config.</div>
+        </article>
+        <article class="panel">
+          <h2>System Coverage</h2>
+          <div class="cr" style="margin-top:0">
+            <span class="chip">Bookings &#10003;</span>
+            <span class="chip">CRM &#10003;</span>
+            <span class="chip">POS &#10003;</span>
+            <span class="chip">Rooms &#10003;</span>
+            <span class="chip">Internet &#10003;</span>
+            <span class="chip">Finance &#10003;</span>
+            <span class="chip go">HR &rarr; Phase 4</span>
+            <span class="chip go">AI Opt &rarr; Phase 5</span>
+            <span class="chip bl2">Multi-site &rarr; Enterprise</span>
+          </div>
+          <p style="margin:13px 0 0;font-size:.81rem;color:#7a6e65;line-height:1.7">
+            This system is not a website. It is not software.<br>
+            It is the <strong>digital infrastructure</strong> that runs JUA HOTEL.<br>
+            Q4Life builds <strong>revenue-generating operating systems</strong>.
+          </p>
+        </article>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function updateTime() {
+    const t = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+    const el = document.getElementById("liveTime");
+    if (el) el.textContent = t;
+  }
+  updateTime();
+  setInterval(updateTime, 30000);
+
+  const navBtns = document.querySelectorAll(".nav-item[data-view]");
+  const views   = document.querySelectorAll(".view");
+  const mainContent = document.querySelector("main");
+
+  function activateView(viewName, options = {}) {
+    const shouldUpdateHash = options.updateHash !== false;
+    const shouldScroll = options.scroll !== false;
+    const targetView = document.getElementById("view-" + viewName);
+    if (!targetView) return;
+
+    views.forEach(v => v.classList.remove("active"));
+    navBtns.forEach(b => b.classList.remove("active"));
+    const targetBtn = document.querySelector('.nav-item[data-view="' + viewName + '"]');
+    targetView.classList.add("active");
+    if (targetBtn) targetBtn.classList.add("active");
+    if (shouldUpdateHash && window.location.hash !== "#" + viewName) {
+      window.location.hash = viewName;
+    }
+    if (shouldScroll && mainContent) {
+      mainContent.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (shouldScroll) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  navBtns.forEach(btn => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      activateView(btn.dataset.view);
+    });
+  });
+
+  function getViewFromHash() {
+    return window.location.hash.replace(/^#/, "");
+  }
+
+  const initialView = getViewFromHash() || "dashboard";
+  activateView(initialView, { updateHash: !!getViewFromHash(), scroll: false });
+
+  window.addEventListener("hashchange", () => {
+    const hashView = getViewFromHash() || "dashboard";
+    activateView(hashView, { updateHash: false });
+  });
+</script>
+</body>
+</html>
