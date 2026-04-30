@@ -1,0 +1,49 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="88" y1="54" x2="1061" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7EC"/>
+      <stop offset="0.5" stop-color="#F5EAD8"/>
+      <stop offset="1" stop-color="#E8D7BE"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="827" y1="104" x2="1115" y2="527" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5D2F1F"/>
+      <stop offset="1" stop-color="#2E1811"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="235" y1="414" x2="602" y2="414" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8C4B2F"/>
+      <stop offset="1" stop-color="#D9A441"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)"/>
+  <circle cx="1060" cy="120" r="180" fill="#23697A" fill-opacity="0.12"/>
+  <circle cx="130" cy="510" r="150" fill="#D9A441" fill-opacity="0.18"/>
+  <rect x="70" y="70" width="1060" height="490" rx="28" fill="#FFFDF7" stroke="#E3D7C4" stroke-width="2"/>
+  <rect x="108" y="110" width="100" height="100" rx="26" fill="#F4D59C"/>
+  <path d="M137 154H179V166C179 187.539 161.539 205 140 205H137V154Z" fill="#8C4B2F"/>
+  <path d="M179 154H221V161C221 185.301 201.301 205 177 205H179V154Z" fill="#23697A"/>
+  <text x="243" y="148" fill="#8C4B2F" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">JUA HOTEL x Q4Life</text>
+  <text x="243" y="205" fill="#2A2218" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="800">Digital Operating System</text>
+  <text x="243" y="252" fill="#695C50" font-family="Arial, Helvetica, sans-serif" font-size="28">Bookings, CRM, POS, PMS, Internet Sales, Finance, and Reports</text>
+  <rect x="243" y="298" width="359" height="56" rx="28" fill="url(#accent)"/>
+  <text x="285" y="334" fill="#FFF8F0" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Live hotel operations demo</text>
+  <rect x="243" y="391" width="159" height="118" rx="22" fill="#FBF6EE" stroke="#E3D7C4"/>
+  <rect x="420" y="391" width="159" height="118" rx="22" fill="#FBF6EE" stroke="#E3D7C4"/>
+  <rect x="597" y="391" width="159" height="118" rx="22" fill="#FBF6EE" stroke="#E3D7C4"/>
+  <text x="268" y="430" fill="#6B5E52" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Occupancy</text>
+  <text x="268" y="480" fill="#2A2218" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800">92%</text>
+  <text x="445" y="430" fill="#6B5E52" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Revenue</text>
+  <text x="445" y="480" fill="#2A2218" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800">$48.5K</text>
+  <text x="622" y="430" fill="#6B5E52" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Modules</text>
+  <text x="622" y="480" fill="#2A2218" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="800">8 Live</text>
+  <rect x="813" y="104" width="266" height="422" rx="26" fill="url(#panel)"/>
+  <text x="848" y="151" fill="#FFE7BC" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Executive Snapshot</text>
+  <rect x="848" y="181" width="196" height="54" rx="16" fill="#FFFFFF" fill-opacity="0.09"/>
+  <rect x="848" y="250" width="196" height="54" rx="16" fill="#FFFFFF" fill-opacity="0.09"/>
+  <rect x="848" y="319" width="196" height="54" rx="16" fill="#FFFFFF" fill-opacity="0.09"/>
+  <rect x="848" y="388" width="196" height="54" rx="16" fill="#FFFFFF" fill-opacity="0.09"/>
+  <text x="870" y="214" fill="#FFF8EE" font-family="Arial, Helvetica, sans-serif" font-size="16">23 arrivals before 8 PM</text>
+  <text x="870" y="283" fill="#FFF8EE" font-family="Arial, Helvetica, sans-serif" font-size="16">47 active internet sessions</text>
+  <text x="870" y="352" fill="#FFF8EE" font-family="Arial, Helvetica, sans-serif" font-size="16">342 loyalty members</text>
+  <text x="870" y="421" fill="#FFF8EE" font-family="Arial, Helvetica, sans-serif" font-size="16">36.1K net profit</text>
+  <text x="848" y="486" fill="#E9D9C6" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700">Open in browser for the full interactive experience</text>
+</svg>

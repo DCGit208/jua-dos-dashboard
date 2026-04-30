@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JUA HOTEL | Q4Life DOS</title>
+  <meta name="description" content="Interactive Q4Life Digital Operating System demo for JUA HOTEL covering bookings, CRM, POS, PMS, internet sales, finance, and reporting.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="JUA HOTEL | Q4Life DOS Demo">
+  <meta property="og:description" content="Open the live JUA HOTEL operating dashboard with bookings, CRM, POS, rooms, finance, and reports.">
+  <meta property="og:url" content="https://dcgit208.github.io/jua-dos-dashboard/">
+  <meta property="og:site_name" content="JUA HOTEL x Q4Life">
+  <meta property="og:image" content="https://dcgit208.github.io/jua-dos-dashboard/og-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JUA HOTEL | Q4Life DOS Demo">
+  <meta name="twitter:description" content="Interactive operating dashboard for JUA HOTEL powered by Q4Life.">
+  <meta name="twitter:image" content="https://dcgit208.github.io/jua-dos-dashboard/og-preview.png">
+  <link rel="canonical" href="https://dcgit208.github.io/jua-dos-dashboard/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -15,12 +30,46 @@
       --shadow:0 16px 32px rgba(30,20,10,0.10);
     }
     *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
     body{margin:0;font-family:"Manrope",sans-serif;color:var(--ink);
       background:radial-gradient(circle at 6% 6%,rgba(140,75,47,.17),transparent 34%),
         radial-gradient(circle at 94% 12%,rgba(35,105,122,.14),transparent 30%),
         radial-gradient(circle at 18% 92%,rgba(217,164,65,.2),transparent 34%),
         var(--bg);min-height:100vh;}
+    body.modal-open{overflow:hidden;}
     .dashboard{display:grid;grid-template-columns:256px 1fr;min-height:100vh;}
+
+    .welcome{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      padding:20px;background:rgba(31,20,13,.72);backdrop-filter:blur(10px);z-index:120;}
+    .welcome.open{display:flex;animation:fadeUp 260ms ease forwards;}
+    .welcome-card{width:min(960px,100%);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 28px 64px rgba(18,12,7,.32);background:linear-gradient(135deg,#fff8ed,#f7efe1 58%,#efe3d2);}
+    .welcome-grid{display:grid;grid-template-columns:1.1fr .9fr;min-height:520px;}
+    .welcome-main{padding:36px 34px 30px;position:relative;
+      background:radial-gradient(circle at top left,rgba(217,164,65,.32),transparent 38%),
+      radial-gradient(circle at bottom right,rgba(35,105,122,.18),transparent 36%);}
+    .welcome-side{padding:32px;background:linear-gradient(180deg,#5d2f1f,#3a2017);color:#fff4e5;display:flex;flex-direction:column;justify-content:space-between;}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;
+      background:rgba(140,75,47,.12);color:var(--brand);font-size:.76rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;}
+    .welcome h1{margin:18px 0 12px;font-family:"Space Grotesk",sans-serif;font-size:clamp(2rem,4vw,3.4rem);line-height:1.02;letter-spacing:-.04em;}
+    .welcome-copy{margin:0;color:#5f5449;font-size:1rem;line-height:1.7;max-width:48ch;}
+    .welcome-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0;}
+    .welcome-point{padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.64);border:1px solid rgba(140,75,47,.12);}
+    .welcome-point strong{display:block;font-size:.95rem;margin-bottom:4px;}
+    .welcome-point span{display:block;font-size:.82rem;color:#685c50;line-height:1.5;}
+    .welcome-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
+    .welcome-actions .btn{padding:12px 16px;font-size:.9rem;min-height:46px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;}
+    .welcome-note{margin-top:16px;font-size:.8rem;color:#6a5f53;}
+    .welcome-note code,.welcome-point code{padding:2px 6px;border-radius:999px;background:rgba(140,75,47,.08);color:#7a4528;font-size:.78rem;}
+    .welcome-side h2{margin:0 0 14px;font-family:"Space Grotesk",sans-serif;font-size:1.2rem;}
+    .welcome-stack{display:grid;gap:12px;}
+    .welcome-metric{padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);}
+    .welcome-metric span{display:block;font-size:.74rem;opacity:.76;text-transform:uppercase;letter-spacing:.06em;}
+    .welcome-metric strong{display:block;font-size:1.35rem;margin-top:4px;}
+    .welcome-links{display:grid;gap:9px;margin-top:18px;}
+    .welcome-link{display:flex;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:12px;
+      background:rgba(255,255,255,.06);color:#fff4e5;text-decoration:none;border:1px solid rgba(255,255,255,.08);font-size:.84rem;}
+    .welcome-link:hover{background:rgba(255,255,255,.1);}
 
     /* SIDEBAR */
     .sidebar{background:linear-gradient(180deg,#5d2f1f,#4a271a 46%,#2e1811);
@@ -175,6 +224,9 @@
       .menu{grid-template-columns:repeat(4,minmax(90px,1fr));}
     }
     @media(max-width:780px){
+      .welcome-grid{grid-template-columns:1fr;}
+      .welcome-main,.welcome-side{padding:24px 20px;}
+      .welcome-points{grid-template-columns:1fr;}
       .sidebar{padding:14px 0 12px;position:sticky;top:0;z-index:40;box-shadow:0 8px 18px rgba(0,0,0,.2);height:auto;overflow:hidden;}
       .logo,.logo-sub{padding:0 12px;}
       .menu-label{display:none;}
@@ -193,6 +245,11 @@
       .sb-foot{display:none;}
     }
     @media(max-width:460px){
+      .welcome{padding:10px;}
+      .welcome-card{border-radius:20px;}
+      .welcome h1{font-size:1.8rem;}
+      .welcome-actions{flex-direction:column;}
+      .welcome-actions .btn{width:100%;}
       .ss,.sig-row{grid-template-columns:1fr;}
       main{padding:14px 12px 30px;}
       .vh{align-items:flex-start;}
@@ -205,6 +262,55 @@
   </style>
 </head>
 <body>
+<div class="welcome" id="welcomeModal" aria-hidden="true">
+  <div class="welcome-card">
+    <div class="welcome-grid">
+      <section class="welcome-main">
+        <span class="eyebrow">Live client demo</span>
+        <h1>Welcome to the JUA HOTEL digital operating system.</h1>
+        <p class="welcome-copy">This walkthrough is built for first-time visitors opening from WhatsApp. Start with the live dashboard, jump to any business area, or use presentation mode for a cleaner boardroom flow.</p>
+        <div class="welcome-points">
+          <article class="welcome-point">
+            <strong>Use the section tabs</strong>
+            <span>Bookings, CRM, POS, Rooms, Internet Sales, Finance, and Reports all switch instantly.</span>
+          </article>
+          <article class="welcome-point">
+            <strong>Built for mobile</strong>
+            <span>The navigation becomes a swipeable tab strip on phones so the demo still works in chat browsers.</span>
+          </article>
+          <article class="welcome-point">
+            <strong>Presentation-ready</strong>
+            <span>Open the projector version when you want a tighter executive view for live meetings.</span>
+          </article>
+          <article class="welcome-point">
+            <strong>Shareable section links</strong>
+            <span>Every module supports direct URLs such as <code>#reports</code> and <code>#crm</code>.</span>
+          </article>
+        </div>
+        <div class="welcome-actions">
+          <button class="btn btn-p" id="enterDashboard">Enter Dashboard</button>
+          <a class="btn btn-s" href="presentation.html">Open Presentation Mode</a>
+        </div>
+        <div class="welcome-note">Tip: if this was opened from WhatsApp, tap any section tab once the dashboard loads to move through the demo.</div>
+      </section>
+      <aside class="welcome-side">
+        <div>
+          <h2>What the client will see</h2>
+          <div class="welcome-stack">
+            <div class="welcome-metric"><span>Revenue view</span><strong>$48,500</strong></div>
+            <div class="welcome-metric"><span>Occupancy</span><strong>92%</strong></div>
+            <div class="welcome-metric"><span>Connected modules</span><strong>8 live sections</strong></div>
+          </div>
+        </div>
+        <div class="welcome-links">
+          <a class="welcome-link" href="#dashboard"><span>Open overview</span><strong>Dashboard</strong></a>
+          <a class="welcome-link" href="#bookings"><span>Open booking engine</span><strong>Bookings</strong></a>
+          <a class="welcome-link" href="#reports"><span>Open KPI exports</span><strong>Reports</strong></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
 <div class="dashboard">
 
   <!-- SIDEBAR -->
@@ -672,6 +778,40 @@
   const navBtns = document.querySelectorAll(".nav-item[data-view]");
   const views   = document.querySelectorAll(".view");
   const mainContent = document.querySelector("main");
+  const welcomeModal = document.getElementById("welcomeModal");
+  const enterDashboard = document.getElementById("enterDashboard");
+  const welcomeLinks = document.querySelectorAll(".welcome-link");
+
+  function openWelcome() {
+    if (!welcomeModal) return;
+    welcomeModal.classList.add("open");
+    welcomeModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeWelcome() {
+    if (!welcomeModal) return;
+    welcomeModal.classList.remove("open");
+    welcomeModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    try {
+      localStorage.setItem("juaDosWelcomeSeen", "1");
+      sessionStorage.setItem("juaDosWelcomeSession", "1");
+    } catch (error) {
+      // Ignore storage restrictions in embedded browsers.
+    }
+  }
+
+  function shouldShowWelcome() {
+    const isWhatsAppVisitor = /WhatsApp/i.test(navigator.userAgent) || /whatsapp/i.test(document.referrer);
+    try {
+      const hasSeenWelcome = localStorage.getItem("juaDosWelcomeSeen") === "1";
+      const hasSeenThisSession = sessionStorage.getItem("juaDosWelcomeSession") === "1";
+      return (!hasSeenWelcome || isWhatsAppVisitor) && !hasSeenThisSession;
+    } catch (error) {
+      return true;
+    }
+  }
 
   function activateView(viewName, options = {}) {
     const shouldUpdateHash = options.updateHash !== false;
@@ -698,6 +838,20 @@
     btn.addEventListener("click", (event) => {
       event.preventDefault();
       activateView(btn.dataset.view);
+      closeWelcome();
+    });
+  });
+
+  if (enterDashboard) {
+    enterDashboard.addEventListener("click", () => {
+      closeWelcome();
+      activateView(getViewFromHash() || "dashboard", { updateHash: !!getViewFromHash(), scroll: false });
+    });
+  }
+
+  welcomeLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      closeWelcome();
     });
   });
 
@@ -712,6 +866,16 @@
     const hashView = getViewFromHash() || "dashboard";
     activateView(hashView, { updateHash: false });
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeWelcome();
+    }
+  });
+
+  if (shouldShowWelcome()) {
+    openWelcome();
+  }
 </script>
 </body>
 </html>
