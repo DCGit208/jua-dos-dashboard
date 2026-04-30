@@ -802,17 +802,6 @@
     }
   }
 
-  function shouldShowWelcome() {
-    const isWhatsAppVisitor = /WhatsApp/i.test(navigator.userAgent) || /whatsapp/i.test(document.referrer);
-    try {
-      const hasSeenWelcome = localStorage.getItem("juaDosWelcomeSeen") === "1";
-      const hasSeenThisSession = sessionStorage.getItem("juaDosWelcomeSession") === "1";
-      return (!hasSeenWelcome || isWhatsAppVisitor) && !hasSeenThisSession;
-    } catch (error) {
-      return true;
-    }
-  }
-
   function activateView(viewName, options = {}) {
     const shouldUpdateHash = options.updateHash !== false;
     const shouldScroll = options.scroll !== false;
@@ -873,9 +862,6 @@
     }
   });
 
-  if (shouldShowWelcome()) {
-    openWelcome();
-  }
 </script>
 </body>
 </html>
